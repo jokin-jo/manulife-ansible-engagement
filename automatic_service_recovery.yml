@@ -1,0 +1,36 @@
+---
+- name: Automatic Service Recovery
+  hosts: servera
+  vars:
+   my_pkg: 
+    - httpd
+    - cups
+    - mariadb-server
+   my_svc:
+    - httpd
+    - cups
+    - mariadb
+  tasks:
+  - name: "Install package to initate service"
+    ansible.builtin.dnf:
+     name: "{{ my_pkg }}"
+     state: installed 
+  - name: "check the service is active"
+    shell: systemctl is-active "{{ item }}"
+    register: svc_status
+    loop: "{{ my_svc }}"
+    ignore_errors: true 
+
+  - name: "show the service status"
+    debug:
+      msg: "{{ item.item }}"
+    loop: "{{ svc_status.results  }}"
+
+  - name: start service if NOT active 
+    ansible.builtin.service:
+     name: "{{ item.item }}"
+     state: started
+     enabled: true 
+    when:  item.stdout != "active"
+    loop: "{{ svc_status.results  }}"
+
