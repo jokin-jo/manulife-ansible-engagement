@@ -1,0 +1,6 @@
+---
+- name: Execute the role - CIS Hardening
+  hosts: all
+  become: true
+  roles:
+    - custom_cis_hardening

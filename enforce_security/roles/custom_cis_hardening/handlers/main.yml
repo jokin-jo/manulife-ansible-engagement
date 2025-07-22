@@ -1,0 +1,5 @@
+---
+# handlers file for custom_cis_hardening
+- name: "Reload systemd"
+  systemd:
+   daemon_reload: true 

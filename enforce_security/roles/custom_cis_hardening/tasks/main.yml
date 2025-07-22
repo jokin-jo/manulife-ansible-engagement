@@ -1,0 +1,18 @@
+---
+# tasks file for custom_cis_hardening
+- name: set login Banner
+  ansible.builtin.copy: 
+    content: "{{ lookup('template', 'banner.j2') }}"
+    dest: /etc/issue 
+    owner: root
+    group: root
+    mode: 0644
+- name: disable Ctrl+Alt_Del reboot key
+  ansible.builtin.file:
+   path: /etc/systemd/system/ctrl-alt-del.target
+   state: absent 
+- name: Set Password Complexity
+  ansible.builtin.lineinfile:
+   path: /etc/security/pwquality.conf
+   line: 'minlen = 13'
+  notify: "Reload systemd" 

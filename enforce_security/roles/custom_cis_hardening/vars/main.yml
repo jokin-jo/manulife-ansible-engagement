@@ -1,0 +1,6 @@
+---
+# vars file for custom_cis_hardening
+cis_set_banner: true 
+cis_disable_ctrl_alt_del: true 
+cis_set_password_policy: true 
+cis_target_os: "rhel"
